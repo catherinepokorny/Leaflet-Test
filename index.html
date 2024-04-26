@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Example with GeoJSON</title>
+  <title>Leaflet Map of Minnesota with Points and Lines</title>
   <!-- Include Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <!-- Include Leaflet JavaScript -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
     #map {
-      height: 400px;
+      height: 500px;
     }
   </style>
 </head>
@@ -20,46 +20,40 @@
 
 <script>
   // Initialize the map
-  var map = L.map('map').setView([51.505, -0.09], 13); // Latitude, Longitude, Zoom Level
+  var map = L.map('map').setView([46.7296, -94.6859], 6); // Centered on Minnesota, Zoom level 6
 
   // Add base layer (OpenStreetMap)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  // Define GeoJSON data for points and lines
-  var pointGeoJSON = {
-    "type": "Feature",
-    "geometry": {
-      "type": "Point",
-      "coordinates": [-0.09, 51.505] // Longitude, Latitude
-    },
-    "properties": {
-      "name": "Sample Point"
-    }
-  };
+  // Add a marker for Minneapolis
+  L.marker([44.9778, -93.2650]).addTo(map)
+    .bindPopup("<b>Minneapolis, MN</b><br>Largest city in Minnesota.").openPopup();
 
-  var lineGeoJSON = {
-    "type": "Feature",
-    "geometry": {
-      "type": "LineString",
-      "coordinates": [
-        [-0.09, 51.505], // First point
-        [-0.1, 51.51],   // Second point
-        [-0.12, 51.52]   // Third point
-      ]
-    },
-    "properties": {
-      "name": "Sample Line"
-    }
-  };
+  // Add a marker for Duluth
+  L.marker([46.7867, -92.1005]).addTo(map)
+    .bindPopup("<b>Duluth, MN</b><br>Largest port on Lake Superior.").openPopup();
 
-  // Add GeoJSON layers to the map
-  L.geoJSON(pointGeoJSON).addTo(map);
-  L.geoJSON(lineGeoJSON).addTo(map);
+  // Add a marker for Rochester
+  L.marker([44.0121, -92.4802]).addTo(map)
+    .bindPopup("<b>Rochester, MN</b><br>Home of the Mayo Clinic.").openPopup();
 
-  // Fit the map to the GeoJSON layers
-  map.fitBounds(L.geoJSON([pointGeoJSON, lineGeoJSON]).getBounds());
+  // Add a marker for St. Cloud
+  L.marker([45.5579, -94.1632]).addTo(map)
+    .bindPopup("<b>St. Cloud, MN</b><br>Central Minnesota city.").openPopup();
+
+  // Define coordinates for a line (Minnesota's Interstate 35)
+  var interstate35 = [
+    [43.0498, -92.9615], // Southern endpoint
+    [46.8372, -92.1533]  // Northern endpoint
+  ];
+
+  // Create a polyline and add it to the map
+  var i35Polyline = L.polyline(interstate35, {color: 'blue'}).addTo(map);
+
+  // Zoom the map to fit the line
+  map.fitBounds(i35Polyline.getBounds());
 </script>
 
 </body>
